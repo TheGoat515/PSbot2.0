@@ -2,8 +2,7 @@ from config import BOT_TOKEN
 import logging
 
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler, \
-    ContextTypes
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
 from datetime import date
 
 today = date.today()
