@@ -2,7 +2,7 @@ from config import BOT_TOKEN
 import logging
 
 from telegram import Update, ForceReply, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler, ContextTypes
 from datetime import date
 
 today = date.today()
@@ -26,8 +26,13 @@ def start(update: Update, context: CallbackContext) -> None:
     """Send a message when the command /start is issued."""
     user = update.effective_user
     update.message.reply_markdown_v2(
-        fr'Hi {user.mention_markdown_v2()}\!',
-    )
+        fr'Hi {user.mention_markdown_v2()}\!',)
+
+def help(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /help is issued."""
+    user = update.effective_user
+    update.message.reply_markdown_v2(
+        'Help not available yet, good luck',)
 
 
 def paradestate(update: Update, context: CallbackContext) -> None:
@@ -42,7 +47,7 @@ def paradestate(update: Update, context: CallbackContext) -> None:
     JurongCstrength = 0
     JurongTstrength = 0
     JurongLVE = 2
-    JurongOFF = 0
+    JurongOFF = 5
     JurongMC = 2
     JurongOS = 0
     JurongAO = 1
@@ -50,6 +55,14 @@ def paradestate(update: Update, context: CallbackContext) -> None:
 
     """Send a message when the command /ps is issued."""
     user = update.effective_user
+    keyboard = [
+        [
+            InlineKeyboardButton("Option 1", callback_data='1'),
+            InlineKeyboardButton("Option 2", callback_data='2'),
+        ],
+        [InlineKeyboardButton("Option 3", callback_data='3')],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
     if JurongLVE != 0:
         JLVE = fr'LVE:{JurongLVE}' + '\n'
     if JurongOFF != 0:
@@ -79,9 +92,13 @@ def paradestate(update: Update, context: CallbackContext) -> None:
         '<b>HQ</b>' '\n'
         '\n' '<b>Section 1</b>' '\n'
         '\n' '<b>Section 2</b>' '\n'
-        '\n' '<b>Section 3</b>'
+        '\n' '<b>Section 3</b>' , reply_markup=reply_markup
     )
 
+def buttontest(update: Update, context: CallbackContext) -> None:
+    """Sends a message with three inline buttons attached."""
+ 
+    update.message.reply_text("Please choose:", )
 
 def main() -> None:
     """Start the bot."""
@@ -94,6 +111,8 @@ def main() -> None:
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("ps", paradestate))
+    dispatcher.add_handler(CommandHandler("help", help))
+    dispatcher.add_handler(CommandHandler("button",buttontest))
 
     updater.start_polling()
 
